@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class TodoApp {
-    static ActionDelegate DEFAULT_ACTION  = () -> System.out.println("Some action");
+    private static final ActionDelegate DEFAULT_ACTION  = () -> System.out.println("Some action");
 
     private void showMenu(List<String> actions) {
         System.out.println("Меню:");

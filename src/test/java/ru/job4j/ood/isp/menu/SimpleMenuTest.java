@@ -52,7 +52,4 @@ public class SimpleMenuTest {
                 .extracting(Menu.MenuItemInfo::getNumber)
                 .isEqualTo("1.1.");
     }
-
-
-
 }
