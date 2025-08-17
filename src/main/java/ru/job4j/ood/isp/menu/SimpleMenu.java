@@ -8,25 +8,53 @@ public class SimpleMenu implements Menu {
 
     @Override
     public boolean add(String parentName, String childName, ActionDelegate actionDelegate) {
-   /*  добавьте реализацию*/
-        return  false;
+        SimpleMenuItem item = new SimpleMenuItem(childName, actionDelegate);
+        if (Objects.equals(Menu.ROOT, parentName)) {
+            rootElements.add(item);
+            return true;
+        }
+        Optional<ItemInfo> itemInfo = findItem(parentName);
+        if (itemInfo.isPresent()) {
+            itemInfo.get().menuItem.getChildren().add(item);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
     public Optional<MenuItemInfo> select(String itemName) {
-        /*  добавьте реализацию*/
-        return null;
+        return findItem(itemName).map(info -> new MenuItemInfo(info.menuItem, info.number));
     }
 
     @Override
     public Iterator<MenuItemInfo> iterator() {
-        /*  добавьте реализацию*/
-        return null;
+        return new Iterator<>() {
+            DFSIterator dfs = new DFSIterator();
+
+            @Override
+            public boolean hasNext() {
+                return dfs.hasNext();
+            }
+
+            @Override
+            public MenuItemInfo next() {
+                ItemInfo info = dfs.next();
+
+                return new MenuItemInfo(info.menuItem, info.number) ;
+            }
+        };
     }
 
     private Optional<ItemInfo> findItem(String name) {
-        /*  добавьте реализацию*/
-        return null;
+        Iterator<ItemInfo> iterator = new DFSIterator();
+        while (iterator.hasNext()) {
+            ItemInfo itemInfo = iterator.next();
+            if (itemInfo.menuItem.getName().equals(name)) {
+                return Optional.of(itemInfo);
+            }
+        }
+        return Optional.empty();
     }
 
     private static class SimpleMenuItem implements MenuItem {
@@ -93,7 +121,6 @@ public class SimpleMenu implements Menu {
     }
 
     private class ItemInfo {
-
         MenuItem menuItem;
         String number;
 

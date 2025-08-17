@@ -30,4 +30,29 @@ public class SimpleMenuTest {
                 .isEqualTo(menu.select("Покормить собаку").get());
         menu.forEach(i -> System.out.println(i.getNumber() + i.getName()));
     }
+
+    @Test
+    public void whenSelectNonExistentItemThenEmpty() {
+        Menu menu = new SimpleMenu();
+        menu.add(Menu.ROOT, "Сходить в магазин", STUB_ACTION);
+        menu.add(Menu.ROOT, "Покормить собаку", STUB_ACTION);
+        menu.add("Сходить в магазин", "Купить продукты", STUB_ACTION);
+        menu.add("Купить продукты", "Купить хлеб", STUB_ACTION);
+        menu.add("Купить продукты", "Купить молоко", STUB_ACTION);
+        assertThat(menu.select("Купить творог")).isEmpty();
+    }
+
+    @Test
+    void whenSelectThenNumberingCorrect() {
+        Menu menu = new SimpleMenu();
+        menu.add(Menu.ROOT, "A", STUB_ACTION);
+        menu.add(Menu.ROOT, "B", STUB_ACTION);
+        menu.add("A", "A1", STUB_ACTION);
+        assertThat(menu.select("A1")).get()
+                .extracting(Menu.MenuItemInfo::getNumber)
+                .isEqualTo("1.1.");
+    }
+
+
+
 }
